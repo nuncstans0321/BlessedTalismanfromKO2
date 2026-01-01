@@ -1,83 +1,113 @@
 :root {
     --temple-red: #b32424;
     --gold: #f3d18c;
-    --dark: #121212;
+    --dark-bg: #1a1a1a;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
 body, html {
-    margin: 0; padding: 0; height: 100%; width: 100%;
-    background-color: var(--dark);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%; /* 關鍵：確保高度 100% */
+    background-color: var(--dark-bg);
+    color: white;
     font-family: "PingFang TC", "STHeiti", sans-serif;
-    color: white; overflow: hidden;
+    overflow: hidden; /* 防止手機版隨意捲動 */
 }
 
-#app { width: 100%; height: 100%; position: relative; }
+#app {
+    width: 100%;
+    height: 100%;
+}
 
 .scene {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    display: none; justify-content: center; align-items: center;
-    padding: 20px; text-align: center;
+    display: none;
+    width: 100%;
+    height: 100vh; /* 確保每一幕都是手機全螢幕 */
+    flex-direction: column;
+    justify-content: center; /* 垂直置中 */
+    align-items: center;     /* 水平置中 */
+    padding: 20px;
+    text-align: center;
+    position: relative;
 }
 
-.scene.active { display: flex; animation: fadeIn 0.8s forwards; }
-
-.content-wrapper {
-    width: 100%; max-width: 400px;
-    display: flex; flex-direction: column; align-items: center;
+.scene.active {
+    display: flex; /* 啟動場景時設為 Flex */
+    animation: fadeIn 0.8s ease-in-out;
 }
 
-/* 照片置中與美化 */
+/* 記憶照片美化 */
 .photo-frame {
-    width: 100%; margin-bottom: 30px;
-    border: 3px solid var(--gold);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    background: #222; overflow: hidden;
+    width: 90%;
+    max-width: 350px;
+    margin-bottom: 40px;
+    border: 4px solid var(--gold);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
-.photo-frame img { width: 100%; display: block; height: auto; }
+.photo-frame img {
+    width: 100%;
+    display: block;
+    height: auto;
+}
 
-/* 按鈕美化：廟宇紅金配色 */
+/* 廟宇風美化按鈕 */
 .main-btn {
-    background: linear-gradient(145deg, #d32f2f, #b71c1c);
+    background: linear-gradient(135deg, #d32f2f 0%, #8e1a1a 100%);
     color: var(--gold);
     border: 2px solid var(--gold);
-    padding: 15px 40px;
-    font-size: 1.2rem;
+    padding: 16px 45px;
+    font-size: 1.25rem;
     font-weight: bold;
     border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
-    min-width: 200px;
+    letter-spacing: 2px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
 }
 
-.main-btn:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
-.main-btn.sm { min-width: 140px; font-size: 1rem; padding: 10px 20px; margin: 5px; }
-
-/* 標籤按鈕 */
-.tag-group { margin-bottom: 30px; }
-.tag-btn {
-    background: transparent; color: var(--gold);
-    border: 1px solid var(--gold); padding: 10px 20px;
-    margin: 5px; border-radius: 5px; font-size: 1rem;
+.main-btn:active {
+    transform: scale(0.92);
+    filter: brightness(1.2);
 }
 
-/* 籤筒 */
-.bucket-container img { width: 180px; margin-top: 20px; }
-
-/* 文案頁背景 */
-.text-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1; opacity: 0.2; filter: blur(5px);
+/* 文字場景的專屬背景 */
+.text-bg-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.15; /* 刷淡背景 */
+    filter: blur(4px);
 }
-.text-bg img { width: 100%; height: 100%; object-fit: cover; }
 
+.text-bg-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 文案排版 */
 .fade-in-content {
-    font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    font-size: 1.15rem;
+    line-height: 2;
+    margin-bottom: 40px;
+    padding: 0 20px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,1);
+    white-space: pre-wrap;
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.hidden { display: none; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
