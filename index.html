@@ -1,90 +1,89 @@
-<!doctype html>
-<html lang="zh-Hant">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>～終極2組🧧絕對保護～</title>
-  <link rel="stylesheet" href="./style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>～終極2組🧧絕對保護～</title>
+    <style>
+        /* CSS 樣式直接內建 */
+        :root { --gold: #ffd700; --red: #c0392b; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: "Microsoft JhengHei", sans-serif; background: #1a1a1a; color: white; overflow: hidden; }
+        .scene { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background: radial-gradient(circle, #2c0000 0%, #000 100%); }
+        .active { display: flex; }
+        .photo-frame img { max-width: 80%; border: 5px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 8px; }
+        .fade-in-text { white-space: pre-line; padding: 30px; line-height: 2; font-size: 1.2rem; }
+        .next-btn { margin-top: 20px; padding: 12px 30px; background: var(--red); color: white; border: 2px solid var(--gold); border-radius: 50px; cursor: pointer; font-size: 1rem; }
+        .shaking { animation: shake 0.2s infinite; }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 50% { transform: translate(-1px, -2px) rotate(-1deg); } 100% { transform: translate(1px, 1px) rotate(0deg); } }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 100; cursor: pointer; }
+        #talisman-card { max-width: 80%; transform: scale(0); transition: 0.5s; }
+        .show-card #talisman-card { transform: scale(1); }
+        .category-buttons button { margin: 5px; padding: 10px 20px; background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; }
+    </style>
 </head>
 <body>
-  <div id="app">
-    <canvas id="fx"></canvas>
+    <audio id="bgm" loop src="assets/bgm.mp3"></audio>
+    <audio id="sfx" src="assets/draw.mp3"></audio>
 
-    <!-- Audio: autoplay requires user gesture -->
-    <audio id="bgm" src="./assets/audio/bgm.wav" loop preload="auto"></audio>
-    <audio id="sfxDraw" src="./assets/audio/sfx_draw.wav" preload="auto"></audio>
-    <audio id="sfxChime" src="./assets/audio/sfx_chime.wav" preload="auto"></audio>
-    <audio id="topicSfx" src="" preload="auto"></audio>
-
-    <section id="scene-opening" class="scene active">
-      <div class="center">
-        <img id="openingPhoto" class="hero-img" src="./assets/img/opening.png" alt="opening" />
-        <button id="btnStart" class="btn primary">開始祝福</button>
-        <p class="hint">（點一下啟動音樂與動畫）</p>
-      </div>
+    <section id="scene-1" class="scene active">
+        <div class="photo-frame"><img src="assets/intro.jpg" alt="Memory"></div>
+        <button class="next-btn" onclick="startExperience()">點擊開啟祝福</button>
     </section>
 
-    <section id="scene-story" class="scene">
-      <div class="center card">
-        <div id="storyText" class="story"></div>
-        <button id="btnToDraw" class="btn primary">前往抽籤</button>
-      </div>
+    <section id="scene-2" class="scene">
+        <div id="text-container" class="fade-in-text">載入中...</div>
+        <button class="next-btn" onclick="goToTemple()">進入祈福殿堂</button>
     </section>
 
-    <section id="scene-draw" class="scene">
-      <div class="draw-wrap">
-        <h2 class="title">🧧 祝福籤筒</h2>
-
-        <div class="tube-area">
-          <div class="tube-stage">
-            <img class="tube" src="./assets/svg/draw_tube.svg" alt="tube" />
-            <!-- 籤枝（SVG）會在抽籤時滑出 -->
-            <img id="stick" class="stick" src="./assets/svg/stick.svg" alt="stick" />
-            <div id="glow" class="incense-glow" aria-hidden="true"></div>
-          </div>
-
-          <div class="controls">
-            <label class="label">選擇求籤項目：</label>
-            <div id="topics" class="topics"></div>
-            <button id="btnDraw" class="btn primary">抽一支籤</button>
-            <p class="hint" style="margin-top:10px;">提示：抽到的籤卡會帶「符紙浮動」與「香火光暈」效果</p>
-          </div>
+    <section id="scene-3" class="scene">
+        <div class="category-buttons">
+            <button onclick="draw('平安')">求平安</button>
+            <button onclick="draw('健康')">祈健康</button>
+            <button onclick="draw('事業')">問事業</button>
         </div>
-
-        <button id="btnSkipToEnd" class="btn ghost">我想先看結尾</button>
-      </div>
-    </section>
-
-    <section id="scene-card" class="scene">
-      <div class="center">
-        <div class="modal">
-          <div class="talisman-frame">
-            <div class="talisman-float">
-              <img id="cardImg" class="card-img" src="" alt="card" />
-              <div class="talisman-aura"></div>
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button id="btnBackToDraw" class="btn primary">回抽籤頁</button>
-            <button id="btnToEnd" class="btn">看結尾</button>
-          </div>
+        <div id="bucket" style="margin-top:40px;">
+            <img src="assets/container.png" width="180" id="bucket-img">
         </div>
-      </div>
     </section>
 
-    <section id="scene-ending" class="scene">
-      <div class="center">
-        <img id="endingImg" class="hero-img" src="./assets/img/ending.png" alt="ending" />
-        <div class="row">
-          <button id="btnReplay" class="btn primary">重播一次</button>
-          <button id="btnShare" class="btn">分享連結</button>
-        </div>
-        <p id="shareTip" class="hint"></p>
-      </div>
-    </section>
-  </div>
+    <div id="overlay" class="overlay" onclick="this.style.display='none'">
+        <img id="talisman-card" src="">
+    </div>
 
-  <script src="./app.js"></script>
+    <script>
+        // JS 邏輯直接內建
+        async function startExperience() {
+            document.getElementById('bgm').play().catch(()=>{});
+            document.getElementById('scene-1').classList.remove('active');
+            document.getElementById('scene-2').classList.add('active');
+            
+            // 直接寫入文案
+            document.getElementById('text-container').innerHTML = `
+                分組活動裡，從鬼故事到八卦大會，我們在最輕鬆的氛圍中無所不談。
+                我們也並肩走過結業旅行、8 公里路跑等共同回憶。
+                我們是 OO 值衝破天際的終極 2 組，組成「祝福陣線」，
+                想用 11 張平安符，成為 OOO 心中的最強護盾！`;
+        }
+
+        function goToTemple() {
+            document.getElementById('scene-2').classList.remove('active');
+            document.getElementById('scene-3').classList.add('active');
+        }
+
+        function draw(type) {
+            const bucket = document.getElementById('bucket-img');
+            document.getElementById('sfx').play().catch(()=>{});
+            bucket.classList.add('shaking');
+            
+            setTimeout(() => {
+                bucket.classList.remove('shaking');
+                const rand = Math.floor(Math.random() * 11) + 1;
+                const overlay = document.getElementById('overlay');
+                document.getElementById('talisman-card').src = `assets/card_${rand}.png`;
+                overlay.style.display = 'flex';
+                setTimeout(() => overlay.classList.add('show-card'), 50);
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
