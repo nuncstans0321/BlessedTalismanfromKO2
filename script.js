@@ -1,65 +1,58 @@
-// 載入文案
-window.onload = () => {
-    fetch('content.txt')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('text-display').innerText = data;
-        })
-        .catch(err => console.error("無法載入文案檔案"));
-};
-
-// 場景轉換
 function nextScene(current) {
     const currentScene = document.getElementById(`scene-${current}`);
     const nextScene = document.getElementById(`scene-${current + 1}`);
-    
-    if (current === 1) {
-        document.getElementById('bgm').play().catch(e => console.log("音效自動播放受限"));
+
+    if (!nextScene) {
+        console.error("找不到下一個場景，請檢查 index.html 中的 id 是否為 scene-" + (current + 1));
+        return;
     }
-    
-    // 轉場淡出特效
+
+    // 啟動音樂（僅在第一幕進入第二幕時）
+    if (current === 1) {
+        const bgm = document.getElementById('bgm');
+        if (bgm) bgm.play().catch(e => console.log("音樂播放受限"));
+        loadContent(); // 確保進入第二頁時才加載內容
+    }
+
+    // 執行轉場
     currentScene.style.opacity = "0";
     setTimeout(() => {
         currentScene.classList.remove('active');
         nextScene.classList.add('active');
-        nextScene.style.opacity = "1";
-    }, 600);
+        // 強制瀏覽器重繪，確保動畫觸發
+        setTimeout(() => {
+            nextScene.style.opacity = "1";
+        }, 50);
+    }, 800);
 }
 
-// 抽籤啟動
+// 獨立載入文案函數，增加錯誤檢查
+function loadContent() {
+    fetch('content.txt')
+        .then(response => {
+            if (!response.ok) throw new Error("文案檔讀取失敗");
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById('text-display').innerText = data;
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('text-display').innerText = "祝福內容載入中...";
+        });
+}
+
+// 抽籤邏輯：確保點擊按鈕會觸發
 function startDraw(category) {
+    console.log("開始抽籤：" + category);
     const bucket = document.getElementById('main-bucket');
     const sfx = document.getElementById('drawSfx');
     
-    sfx.play();
-    bucket.classList.add('shaking');
+    if (sfx) sfx.play();
+    if (bucket) bucket.classList.add('shaking');
 
-    // 模擬抽籤過程
     setTimeout(() => {
-        bucket.classList.remove('shaking');
+        if (bucket) bucket.classList.remove('shaking');
         showTalisman();
     }, 1800);
-}
-
-// 顯示結果
-function showTalisman() {
-    const overlay = document.getElementById('card-overlay');
-    const resultImg = document.getElementById('talisman-result');
-    
-    // 隨機選取 1-11 張平安符圖檔
-    const randomIdx = Math.floor(Math.random() * 11) + 1;
-    resultImg.src = `assets/card_${randomIdx}.png`;
-    
-    overlay.classList.remove('hidden');
-}
-
-function closeTalisman() {
-    document.getElementById('card-overlay').classList.add('hidden');
-    // 閱讀完後自動跳到結尾
-    setTimeout(() => nextScene(3), 300);
-}
-
-function shareLink() {
-    navigator.clipboard.writeText(window.location.href);
-    alert("祝福連結已複製！");
 }
