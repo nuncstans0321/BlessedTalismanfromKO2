@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>～終極2組🧧絕對保護～</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -10,50 +10,58 @@
     <audio id="bgm" loop src="assets/bgm.mp3"></audio>
     <audio id="drawSfx" src="assets/draw.mp3"></audio>
 
-    <div id="card-container">
+    <div id="app">
         <section id="scene-1" class="scene active">
-            <div class="photo-frame">
-                <img src="assets/intro.jpg" alt="記憶照片" id="intro-photo">
+            <div class="content-wrapper">
+                <div class="photo-frame">
+                    <img src="assets/intro.jpg" alt="記憶照片" onerror="this.src='https://via.placeholder.com/300x400?text=Please+Check+Path'">
+                </div>
+                <button class="main-btn" onclick="nextScene(1)">開啟祝福</button>
             </div>
-            <button class="action-btn" onclick="nextScene(1)">開啟祝福</button>
         </section>
 
         <section id="scene-2" class="scene">
-            <div class="text-bg-container">
-                <img src="assets/intro.jpg" alt="背景圖片" class="text-bg-img">
+            <div class="text-bg">
+                <img src="assets/intro.jpg" alt="背景">
             </div>
-            <div id="text-display" class="fade-in-content">
-                </div>
-            <button class="action-btn" onclick="nextScene(2)">前往求籤</button>
+            <div class="content-wrapper">
+                <div id="text-display" class="fade-in-content"></div>
+                <button class="main-btn" onclick="nextScene(2)">前往求籤</button>
+            </div>
         </section>
 
         <section id="scene-3" class="scene">
-            <div class="temple-ui">
-                <div class="tag-selector">
-                    <p class="guide-text">請選擇求籤項目</p>
-                    <div class="btn-group">
-                        <button class="tag-btn" onclick="startDraw('平安')">平安</button>
-                        <button class="tag-btn" onclick="startDraw('健康')">健康</button>
-                        <button class="tag-btn" onclick="startDraw('事業')">事業</button>
-                        <button class="tag-btn" onclick="startDraw('家庭')">家庭</button>
-                        <button class="tag-btn" onclick="startDraw('幸福')">幸福</button>
-                    </div>
+            <div class="content-wrapper">
+                <h2 class="title-gold">請選擇求籤項目</h2>
+                <div class="tag-group">
+                    <button class="tag-btn" onclick="startDraw('平安')">平安</button>
+                    <button class="tag-btn" onclick="startDraw('健康')">健康</button>
+                    <button class="tag-btn" onclick="startDraw('幸福')">幸福</button>
                 </div>
-                <div class="bucket-box">
+                <div class="bucket-container">
                     <img src="assets/container.png" id="main-bucket" alt="籤筒">
                 </div>
             </div>
         </section>
 
         <section id="scene-4" class="scene">
-            <div class="end-content">
+            <div class="content-wrapper">
                 <img src="assets/ending.png" alt="感謝" class="end-img">
-                <div class="final-btns">
-                    <button class="action-btn" onclick="location.reload()">重播一次</button>
-                    <button class="action-btn" onclick="shareLink()">分享連結</button>
+                <div class="btn-group-horizontal">
+                    <button class="main-btn sm" onclick="location.reload()">重播一次</button>
+                    <button class="main-btn sm" onclick="shareLink()">分享連結</button>
                 </div>
             </div>
         </section>
     </div>
 
-    <div id="card-overlay" class="overlay hidden"
+    <div id="card-overlay" class="overlay hidden" onclick="closeTalisman()">
+        <div class="modal">
+            <img id="talisman-result" src="" alt="平安符">
+            <p class="hint">點擊任意處返回</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
