@@ -1,77 +1,83 @@
 :root {
-    --primary-red: #c0392b;
-    --gold: #f1c40f;
+    --temple-red: #b32424;
+    --gold: #f3d18c;
+    --dark: #121212;
 }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 body, html {
-    margin: 0; padding: 0; height: 100%;
-    background-color: #1a1a1a; color: white;
-    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
-    overflow: hidden;
+    margin: 0; padding: 0; height: 100%; width: 100%;
+    background-color: var(--dark);
+    font-family: "PingFang TC", "STHeiti", sans-serif;
+    color: white; overflow: hidden;
 }
+
+#app { width: 100%; height: 100%; position: relative; }
 
 .scene {
-    display: none; height: 100vh; width: 100%;
-    flex-direction: column; align-items: center; justify-content: center;
-    position: relative;
-}
-
-.active { display: flex; }
-
-/* 背景刷淡特效 */
-.text-bg-container {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1; overflow: hidden;
+    display: none; justify-content: center; align-items: center;
+    padding: 20px; text-align: center;
 }
 
-.text-bg-img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.15; filter: blur(4px);
+.scene.active { display: flex; animation: fadeIn 0.8s forwards; }
+
+.content-wrapper {
+    width: 100%; max-width: 400px;
+    display: flex; flex-direction: column; align-items: center;
 }
 
-/* 照片與文字排版 */
-.photo-frame img {
-    max-width: 80%; border: 4px solid white;
-    box-shadow: 0 0 25px rgba(0,0,0,0.5); border-radius: 5px;
+/* 照片置中與美化 */
+.photo-frame {
+    width: 100%; margin-bottom: 30px;
+    border: 3px solid var(--gold);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    background: #222; overflow: hidden;
 }
 
-.fade-in-content {
-    white-space: pre-wrap; line-height: 2.2;
-    font-size: 1.1rem; text-align: center;
-    padding: 30px; max-width: 85%;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+.photo-frame img { width: 100%; display: block; height: auto; }
+
+/* 按鈕美化：廟宇紅金配色 */
+.main-btn {
+    background: linear-gradient(145deg, #d32f2f, #b71c1c);
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 200px;
 }
 
-/* 按鈕樣式 */
-.action-btn {
-    background: var(--primary-red); color: white;
-    border: 1px solid var(--gold); padding: 12px 35px;
-    border-radius: 30px; cursor: pointer; font-size: 1rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
+.main-btn:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
+.main-btn.sm { min-width: 140px; font-size: 1rem; padding: 10px 20px; margin: 5px; }
 
+/* 標籤按鈕 */
+.tag-group { margin-bottom: 30px; }
 .tag-btn {
     background: transparent; color: var(--gold);
-    border: 1px solid var(--gold); padding: 8px 15px;
-    margin: 5px; border-radius: 5px; cursor: pointer;
+    border: 1px solid var(--gold); padding: 10px 20px;
+    margin: 5px; border-radius: 5px; font-size: 1rem;
 }
 
-/* 抽籤動畫 */
-.bucket-box img { width: 220px; transition: transform 0.1s; }
-.shaking { animation: shake 0.15s infinite; }
-@keyframes shake {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(8deg); }
-    100% { transform: rotate(-8deg); }
+/* 籤筒 */
+.bucket-container img { width: 180px; margin-top: 20px; }
+
+/* 文案頁背景 */
+.text-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; opacity: 0.2; filter: blur(5px);
+}
+.text-bg img { width: 100%; height: 100%; object-fit: cover; }
+
+.fade-in-content {
+    font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
-/* 彈窗 */
-.overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.92); z-index: 999;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .hidden { display: none; }
-.modal img { max-width: 80%; animation: pop 0.4s ease-out; }
-@keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
