@@ -1,0 +1,250 @@
+:root{
+  --bg:#0b0b12;
+  --fg:#f3f3f7;
+  --muted:rgba(243,243,247,.75);
+  --card:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.14);
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+  --radius: 18px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "PingFang TC","Noto Sans TC", Arial; background:var(--bg); color:var(--fg); }
+#app{ height:100%; position:relative; overflow:hidden; }
+
+#fx{ position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+
+.scene{
+  position:absolute; inset:0;
+  display:none;
+  z-index:1;
+  padding:24px;
+}
+.scene.active{ display:flex; }
+
+.center{ margin:auto; width:min(920px, 92vw); text-align:center; }
+
+.hero-img{
+  width:min(520px, 86vw);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+}
+
+.card{
+  padding:22px 18px;
+  border-radius:var(--radius);
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+
+.story{
+  white-space:pre-wrap;
+  line-height:1.8;
+  font-size:18px;
+  color:var(--fg);
+  margin-bottom:16px;
+}
+
+.title{ margin:0 0 14px; font-weight:800; letter-spacing:.5px; }
+
+.btn{
+  appearance:none; border:1px solid var(--border);
+  background:rgba(255,255,255,.06);
+  color:var(--fg);
+  padding:12px 16px;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: transform .12s ease, background .12s ease;
+  font-weight:700;
+}
+.btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,.1); }
+.btn:active{ transform: translateY(0px) scale(.99); }
+
+.btn.primary{
+  background: linear-gradient(135deg, rgba(255,210,120,.22), rgba(255,120,120,.22));
+  border-color: rgba(255,210,120,.35);
+}
+
+.btn.ghost{
+  border-color: transparent;
+  background: transparent;
+  box-shadow:none;
+  color:var(--muted);
+}
+
+.row{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+.hint{ color:var(--muted); margin-top:10px; }
+
+.draw-wrap{ margin:auto; width:min(980px, 95vw); text-align:center; }
+
+.tube-area{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
+  align-items:center;
+  padding:18px;
+  border-radius:var(--radius);
+  background:var(--card);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  position:relative;
+}
+
+/* Per-topic background patterns on scene-draw */
+#scene-draw.bg-peace .tube-area{
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.08), transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(255,210,120,.10), transparent 40%);
+}
+#scene-draw.bg-health .tube-area{
+  background-image:
+    linear-gradient(135deg, rgba(120,255,180,.10), transparent 55%),
+    radial-gradient(circle at 60% 30%, rgba(255,255,255,.06), transparent 40%);
+}
+#scene-draw.bg-career .tube-area{
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255,210,120,.10) 0 8px, transparent 8px 16px),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,.06), transparent 45%);
+}
+#scene-draw.bg-family .tube-area{
+  background-image:
+    radial-gradient(circle at 25% 65%, rgba(255,160,160,.10), transparent 45%),
+    radial-gradient(circle at 75% 35%, rgba(255,255,255,.06), transparent 40%);
+}
+#scene-draw.bg-happiness .tube-area{
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.06), transparent),
+    repeating-radial-gradient(circle at 50% 50%, rgba(255,210,120,.08) 0 6px, transparent 6px 18px);
+}
+
+.tube-stage{
+  position:relative;
+  width:min(420px, 90vw);
+  margin:0 auto;
+}
+.tube{
+  width:100%;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
+}
+
+/* 籤枝滑出：初始藏在筒內，抽籤時加 .draw-out */
+.stick{
+  position:absolute;
+  left: 52%;
+  bottom: 22%;
+  width: 52%;
+  transform: translate(-50%, 18%) scale(.98);
+  opacity:.0;
+  transition: transform .65s cubic-bezier(.2,.9,.2,1), opacity .2s ease;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.45));
+}
+.stick.draw-out{
+  transform: translate(-50%, -32%) scale(1);
+  opacity:1;
+}
+.stick.return-in{
+  transform: translate(-50%, 18%) scale(.98);
+  opacity:0;
+}
+
+/* 香火光暈（抽籤時會閃一下） */
+.incense-glow{
+  position:absolute;
+  inset:-20%;
+  pointer-events:none;
+  opacity:0;
+  background:
+    radial-gradient(circle at 50% 60%, rgba(255,210,120,.22), transparent 55%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,.10), transparent 60%);
+  filter: blur(8px);
+  transition: opacity .25s ease;
+}
+.incense-glow.on{ opacity:1; }
+
+/* Topics */
+.controls{ text-align:left; }
+.label{ display:block; margin-bottom:8px; color:var(--muted); }
+
+.topics{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; }
+.topic{
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.05);
+  cursor:pointer;
+  user-select:none;
+}
+.topic.active{
+  border-color: rgba(255,210,120,.55);
+  background: rgba(255,210,120,.14);
+}
+
+.modal{
+  width:min(600px, 92vw);
+  margin:auto;
+  padding:14px;
+  border-radius:var(--radius);
+  background:rgba(10,10,16,.72);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.talisman-frame{
+  position:relative;
+  padding:10px;
+  border-radius:16px;
+  background: rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.10);
+}
+
+/* 符紙浮動 */
+.talisman-float{
+  position:relative;
+  animation: floatY 3.4s ease-in-out infinite;
+  transform-origin:center;
+}
+@keyframes floatY{
+  0%,100%{ transform: translateY(0px); }
+  50%{ transform: translateY(-8px); }
+}
+
+/* 卡片本體 */
+.card-img{
+  width:100%;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+}
+
+/* 光暈（卡片出現時） */
+.talisman-aura{
+  position:absolute;
+  inset:-18px;
+  border-radius:18px;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 60%, rgba(255,210,120,.20), transparent 55%),
+    radial-gradient(circle at 50% 40%, rgba(255,255,255,.10), transparent 60%);
+  filter: blur(10px);
+  opacity:.0;
+  transition: opacity .35s ease;
+}
+.talisman-aura.on{ opacity:1; }
+
+.modal-actions{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+
+/* Transitions */
+.fade-out{ animation: fadeOut .9s ease forwards; }
+@keyframes fadeOut{ to{ opacity:0; transform: scale(1.01); filter: blur(2px); } }
+.fade-in{ animation: fadeIn .7s ease forwards; }
+@keyframes fadeIn{ from{ opacity:0; transform: translateY(6px); } to{ opacity:1; transform: translateY(0); } }
+
+@media (max-width: 860px){
+  .tube-area{ grid-template-columns:1fr; }
+  .controls{ text-align:center; }
+}

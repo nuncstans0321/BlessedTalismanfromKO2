@@ -1,11 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8">
-  <title>Coming Soon</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>～終極2組🧧絕對保護～</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <h1>🚧 準備中</h1>
-  <p>驚喜即將登場。</p>
+  <div id="app">
+    <canvas id="fx"></canvas>
+
+    <!-- Audio: autoplay requires user gesture -->
+    <audio id="bgm" src="./assets/audio/bgm.wav" loop preload="auto"></audio>
+    <audio id="sfxDraw" src="./assets/audio/sfx_draw.wav" preload="auto"></audio>
+    <audio id="sfxChime" src="./assets/audio/sfx_chime.wav" preload="auto"></audio>
+    <audio id="topicSfx" src="" preload="auto"></audio>
+
+    <section id="scene-opening" class="scene active">
+      <div class="center">
+        <img id="openingPhoto" class="hero-img" src="./assets/img/opening.png" alt="opening" />
+        <button id="btnStart" class="btn primary">開始祝福</button>
+        <p class="hint">（點一下啟動音樂與動畫）</p>
+      </div>
+    </section>
+
+    <section id="scene-story" class="scene">
+      <div class="center card">
+        <div id="storyText" class="story"></div>
+        <button id="btnToDraw" class="btn primary">前往抽籤</button>
+      </div>
+    </section>
+
+    <section id="scene-draw" class="scene">
+      <div class="draw-wrap">
+        <h2 class="title">🧧 祝福籤筒</h2>
+
+        <div class="tube-area">
+          <div class="tube-stage">
+            <img class="tube" src="./assets/svg/draw_tube.svg" alt="tube" />
+            <!-- 籤枝（SVG）會在抽籤時滑出 -->
+            <img id="stick" class="stick" src="./assets/svg/stick.svg" alt="stick" />
+            <div id="glow" class="incense-glow" aria-hidden="true"></div>
+          </div>
+
+          <div class="controls">
+            <label class="label">選擇求籤項目：</label>
+            <div id="topics" class="topics"></div>
+            <button id="btnDraw" class="btn primary">抽一支籤</button>
+            <p class="hint" style="margin-top:10px;">提示：抽到的籤卡會帶「符紙浮動」與「香火光暈」效果</p>
+          </div>
+        </div>
+
+        <button id="btnSkipToEnd" class="btn ghost">我想先看結尾</button>
+      </div>
+    </section>
+
+    <section id="scene-card" class="scene">
+      <div class="center">
+        <div class="modal">
+          <div class="talisman-frame">
+            <div class="talisman-float">
+              <img id="cardImg" class="card-img" src="" alt="card" />
+              <div class="talisman-aura"></div>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="btnBackToDraw" class="btn primary">回抽籤頁</button>
+            <button id="btnToEnd" class="btn">看結尾</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="scene-ending" class="scene">
+      <div class="center">
+        <img id="endingImg" class="hero-img" src="./assets/img/ending.png" alt="ending" />
+        <div class="row">
+          <button id="btnReplay" class="btn primary">重播一次</button>
+          <button id="btnShare" class="btn">分享連結</button>
+        </div>
+        <p id="shareTip" class="hint"></p>
+      </div>
+    </section>
+  </div>
+
+  <script src="./app.js"></script>
 </body>
 </html>

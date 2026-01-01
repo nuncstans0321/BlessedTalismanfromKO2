@@ -1,0 +1,81 @@
+{
+  "topics": [
+    {
+      "id": "peace",
+      "label": "平安順遂",
+      "card": "./assets/img/cards/peace.svg",
+      "bgClass": "bg-peace",
+      "sfx": "./assets/audio/topics/peace.wav"
+    },
+    {
+      "id": "health",
+      "label": "身心安康",
+      "card": "./assets/img/cards/health.svg",
+      "bgClass": "bg-health",
+      "sfx": "./assets/audio/topics/health.wav"
+    },
+    {
+      "id": "career",
+      "label": "事業亨通",
+      "card": "./assets/img/cards/career.svg",
+      "bgClass": "bg-career",
+      "sfx": "./assets/audio/topics/career.wav"
+    },
+    {
+      "id": "family",
+      "label": "家和安泰",
+      "card": "./assets/img/cards/family.svg",
+      "bgClass": "bg-family",
+      "sfx": "./assets/audio/topics/family.wav"
+    },
+    {
+      "id": "happiness",
+      "label": "喜樂常在",
+      "card": "./assets/img/cards/happiness.svg",
+      "bgClass": "bg-happiness",
+      "sfx": "./assets/audio/topics/happiness.wav"
+    },
+    {
+      "id": "safety",
+      "label": "出入平安",
+      "card": "./assets/img/cards/safety.svg",
+      "bgClass": "bg-peace",
+      "sfx": "./assets/audio/topics/safety.wav"
+    },
+    {
+      "id": "focus",
+      "label": "心定專注",
+      "card": "./assets/img/cards/focus.svg",
+      "bgClass": "bg-health",
+      "sfx": "./assets/audio/topics/focus.wav"
+    },
+    {
+      "id": "luck",
+      "label": "好運相隨",
+      "card": "./assets/img/cards/luck.svg",
+      "bgClass": "bg-happiness",
+      "sfx": "./assets/audio/topics/luck.wav"
+    },
+    {
+      "id": "energy",
+      "label": "元氣滿滿",
+      "card": "./assets/img/cards/energy.svg",
+      "bgClass": "bg-health",
+      "sfx": "./assets/audio/topics/energy.wav"
+    },
+    {
+      "id": "protection",
+      "label": "護身加持",
+      "card": "./assets/img/cards/protection.svg",
+      "bgClass": "bg-peace",
+      "sfx": "./assets/audio/topics/protection.wav"
+    },
+    {
+      "id": "wish",
+      "label": "所願皆成",
+      "card": "./assets/img/cards/wish.svg",
+      "bgClass": "bg-career",
+      "sfx": "./assets/audio/topics/wish.wav"
+    }
+  ]
+}
