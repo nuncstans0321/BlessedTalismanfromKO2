@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>～終極2組🧧絕對保護～</title>
     <style>
-        :root { --deep-red: #8b0000; --gold: #f3d18c; --silk: #4a0404; }
+        :root { --deep-red: #660000; --gold: #f3d18c; --silk: #330000; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, var(--silk) 0%, #1a0000 100%);
-            color: #fff; overflow: hidden; font-family: sans-serif;
+            background: radial-gradient(circle, var(--silk) 0%, #000 100%);
+            color: #fff; overflow: hidden; font-family: -apple-system, sans-serif;
         }
 
         #magic-canvas { position: fixed; top: 0; left: 0; z-index: 999; pointer-events: none; }
@@ -18,45 +18,49 @@
         .scene {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: none; flex-direction: column; justify-content: center; align-items: center;
-            padding: 15px; text-align: center; z-index: 10;
+            padding: 10px; text-align: center; z-index: 10;
         }
-        .scene.active { display: flex; animation: fadeIn 0.8s; }
+        .scene.active { display: flex; animation: fadeIn 0.5s; }
 
-        /* 相片框優化：確保不切圖 */
+        /* 相片顯示優化：保證不切圖 */
         .photo-frame {
-            width: 95%; max-width: 450px;
+            width: 90%; max-width: 450px;
             border: 2px solid var(--gold);
-            padding: 3px; background: rgba(0,0,0,0.3);
-            box-shadow: 0 0 15px rgba(243, 209, 140, 0.4);
-            margin-bottom: 15px;
+            padding: 2px; background: #000;
+            box-shadow: 0 0 20px rgba(243, 209, 140, 0.5);
+            margin-bottom: 10px;
         }
-        .photo-frame img { width: 100%; height: auto; display: block; object-fit: contain; }
+        .photo-frame img { width: 100%; height: auto; max-height: 45vh; display: block; object-fit: contain; }
 
-        /* 文案優化：減少行距與間隔 */
+        /* 文案優化：精簡行距 */
         .text-content {
-            font-size: 1rem; line-height: 1.6; letter-spacing: 1px;
-            margin-bottom: 15px; text-shadow: 2px 2px 4px #000;
-            padding: 0 10px; max-width: 90%;
+            font-size: 0.95rem; line-height: 1.5; letter-spacing: 0.5px;
+            margin-bottom: 15px; text-shadow: 1px 1px 3px #000;
+            padding: 0 15px; color: #f0f0f0;
         }
 
         .main-btn {
             background: linear-gradient(180deg, #d32f2f, #8b0000);
-            color: var(--gold); border: 2px solid var(--gold);
-            padding: 12px 35px; font-size: 1.1rem; border-radius: 50px; 
-            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            color: var(--gold); border: 1px solid var(--gold);
+            padding: 12px 30px; font-size: 1rem; border-radius: 50px; 
+            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px #000;
+            margin: 5px;
         }
 
-        /* 結局多層照片設定 */
-        .stack-box { position: relative; width: 90%; max-width: 400px; height: 250px; margin-bottom: 20px; cursor: pointer; }
+        /* 結局相簿疊加 */
+        .stack-box { 
+            position: relative; width: 85%; max-width: 400px; 
+            aspect-ratio: 4/3; margin-bottom: 15px; cursor: pointer; 
+        }
         .stack-img { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: cover; border: 3px solid var(--gold); 
-            transition: transform 0.5s, opacity 0.5s; 
+            object-fit: contain; border: 2px solid var(--gold); background: #000;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
         }
 
         .final-msg { 
-            font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 25px var(--gold);
-            display: none; opacity: 0;
+            font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 30px var(--gold);
+            display: none; opacity: 0; transform: scale(0.5);
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -69,41 +73,41 @@
     <audio id="magicSfx" src="assets/magic.mp3"></audio>
 
     <section id="scene-1" class="scene active">
-        <img src="assets/cover_talisman.png" style="width:200px; animation:shake 3s infinite;" onclick="triggerMagic(1)">
-        <p style="color:var(--gold); margin-top:20px; letter-spacing: 3px;">點擊開啟保護</p>
+        <img src="assets/cover_talisman.png" style="width:180px; animation:shake 3s infinite;" onclick="triggerMagic(1)">
+        <p style="color:var(--gold); margin-top:20px; letter-spacing: 2px; opacity:0.8;">點擊護身符 · 開啟祝福</p>
     </section>
 
     <section id="scene-2" class="scene">
-        <img src="assets/text_bg.jpg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.15; object-fit:cover;">
+        <img src="assets/text_bg.jpg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.2; object-fit:cover;">
         <div class="photo-frame">
             <img src="assets/intro.jpg">
         </div>
         <div id="text-display" class="text-content"></div>
-        <button class="main-btn" onclick="triggerMagic(2)">領取祝福</button>
+        <button class="main-btn" onclick="triggerMagic(2)">點擊開始領取祝福</button>
     </section>
 
     <section id="scene-3" class="scene">
         <h2 style="color:var(--gold); margin-bottom:20px;">請點擊籤筒</h2>
         <img src="assets/container.png" id="main-bucket" style="width:160px;" onclick="drawNext()">
-        <p id="progress-text" style="color:var(--gold); margin-top:15px; opacity:0.6;">0 / 11</p>
+        <p id="progress-text" style="color:var(--gold); margin-top:10px; opacity:0.6;">0 / 11</p>
     </section>
 
-    <div id="card-overlay" class="scene" style="background:rgba(0,0,0,0.96); z-index:100;">
-        <img id="card-result" style="width:92%; max-height:80vh; object-fit:contain; border-radius:10px;">
-        <div style="margin-top:20px;">
-            <button class="main-btn" onclick="closeCard()">繼續</button>
-            <button class="main-btn" style="background:var(--gold); color:var(--deep-red);" onclick="triggerMagic(3)">收取</button>
+    <div id="card-overlay" class="scene" style="background:rgba(0,0,0,0.98); z-index:100;">
+        <img id="card-result" style="width:90%; max-height:75vh; object-fit:contain; border-radius:10px;">
+        <div style="margin-top:20px; display: flex;">
+            <button class="main-btn" onclick="closeCard()">收取祝福</button>
+            <button class="main-btn" style="background:var(--gold); color:var(--deep-red);" onclick="goToEnding()">祈福結束</button>
         </div>
     </div>
 
     <section id="scene-4" class="scene">
         <div id="stack-container" class="stack-box" onclick="nextStack()">
             </div>
-        <p id="stack-hint" style="color:var(--gold); font-size:0.8rem;">點擊照片翻閱下一張...</p>
+        <p id="stack-hint" style="color:var(--gold); font-size:0.9rem; margin-top:10px;">點擊照片翻閱下一張...</p>
         <h1 id="final-msg" class="final-msg">終極二組<br>永不結束</h1>
-        <div id="final-btns" style="opacity:0; transition:2s; margin-top:20px; display:none;">
-            <button class="main-btn" onclick="location.reload()">重播</button>
-            <button class="main-btn" onclick="shareLink()">分享</button>
+        <div id="final-btns" style="opacity:0; transition:1s; margin-top:20px; display:none;">
+            <button class="main-btn" onclick="location.reload()">🔂 再播放一次</button>
+            <button class="main-btn" onclick="shareLink()">🔗 分享連結</button>
         </div>
     </section>
 
@@ -111,7 +115,7 @@
         let currentDraw = 0;
         let stackIdx = 1;
         const totalCards = 11;
-        const totalStacks = 5; // 您可以放置 ending_1 到 ending_5
+        const totalStacks = 5; 
         const canvas = document.getElementById('magic-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -120,13 +124,13 @@
         window.dispatchEvent(new Event('resize'));
 
         function triggerMagic(n) {
-            playMagic(true); // 誇張轉場
+            playMagic(true);
             setTimeout(() => {
-                document.getElementById(`scene-${n}`).style.display = 'none';
+                document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
                 document.getElementById(`scene-${n+1}`).classList.add('active');
-                if(n===1) { document.getElementById('bgm').play(); loadText(); }
-                if(n===3) initStack();
-            }, 600);
+                if(n===1) { document.getElementById('bgm').play().catch(()=>{}); loadText(); }
+                if(n===2) initStack();
+            }, 500);
         }
 
         function loadText() {
@@ -144,23 +148,35 @@
                 document.getElementById('card-result').src = `assets/card_${currentDraw}.png`;
                 document.getElementById('card-overlay').style.display = 'flex';
                 playMagic(false);
-            }, 1000);
+            }, 800);
         }
 
         function closeCard() {
             document.getElementById('card-overlay').style.display = 'none';
-            if(currentDraw === totalCards) triggerMagic(3);
+            if(currentDraw === totalCards) goToEnding();
         }
 
-        // 初始化疊加照片
+        function goToEnding() {
+            document.getElementById('card-overlay').style.display = 'none';
+            document.getElementById('scene-3').classList.remove('active');
+            const s4 = document.getElementById('scene-4');
+            s4.classList.add('active');
+            s4.style.display = 'flex';
+            initStack(); 
+            playMagic(true);
+        }
+
         function initStack() {
             const container = document.getElementById('stack-container');
+            if(container.innerHTML !== "") return;
             for(let i=totalStacks; i>=1; i--) {
                 const img = document.createElement('img');
                 img.src = `assets/ending_${i}.jpg`;
                 img.className = 'stack-img';
                 img.id = `stack-${i}`;
                 img.style.zIndex = totalStacks - i;
+                // 防止破圖處理
+                img.onerror = function() { this.src = 'assets/ending.jpg'; };
                 container.appendChild(img);
             }
         }
@@ -168,16 +184,16 @@
         function nextStack() {
             if(stackIdx < totalStacks) {
                 const currentImg = document.getElementById(`stack-${stackIdx}`);
-                currentImg.style.transform = "translateX(150%) rotate(20deg)";
+                currentImg.style.transform = "translateX(200%) rotate(45deg)";
                 currentImg.style.opacity = "0";
                 stackIdx++;
+                playMagic(false);
             } else {
-                // 最後一張觸發碎裂
                 const container = document.getElementById('stack-container');
                 const hint = document.getElementById('stack-hint');
-                playMagic(true, true); // 超誇張碎裂爆炸
+                playMagic(true, true); // 超級大碎裂
                 container.style.opacity = "0";
-                container.style.transform = "scale(2) rotate(10deg)";
+                container.style.transform = "scale(2) rotate(20deg)";
                 hint.style.display = "none";
                 
                 setTimeout(() => {
@@ -185,27 +201,28 @@
                     const msg = document.getElementById('final-msg');
                     msg.style.display = "block";
                     setTimeout(() => { 
-                        msg.style.opacity = "1"; 
-                        document.getElementById('final-btns').style.display = "block";
-                        setTimeout(()=> document.getElementById('final-btns').style.opacity = "1", 500);
+                        msg.style.opacity = "1"; msg.style.transform = "scale(1)"; 
+                        const btns = document.getElementById('final-btns');
+                        btns.style.display = "block";
+                        setTimeout(()=> btns.style.opacity = "1", 500);
                     }, 100);
                 }, 1000);
             }
         }
 
         function playMagic(isBig, isExplosion = false) {
-            const count = isExplosion ? 500 : (isBig ? 150 : 50);
+            const count = isExplosion ? 600 : (isBig ? 150 : 40);
             const sfx = document.getElementById('magicSfx');
-            if(sfx) sfx.play().catch(()=>{});
+            if(sfx) { sfx.currentTime = 0; sfx.play().catch(()=>{}); }
 
             for(let i=0; i<count; i++) {
                 particles.push({
                     x: window.innerWidth/2, y: window.innerHeight/2,
-                    sx: isExplosion ? (Math.random()*25-12.5) : (Math.random()*12-6),
-                    sy: isExplosion ? (Math.random()*25-12.5) : (Math.random()*12-6),
-                    size: Math.random()*5+3,
+                    sx: (Math.random()-0.5) * (isExplosion ? 30 : 15),
+                    sy: (Math.random()-0.5) * (isExplosion ? 30 : 15),
+                    size: Math.random()*5+2,
                     alpha: 1,
-                    color: `hsl(${Math.random()*50 + 40}, 100%, 70%)` // 金黃閃爍色
+                    color: `hsl(${Math.random()*50 + 35}, 100%, 70%)`
                 });
             }
             animate();
@@ -214,10 +231,10 @@
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach((p, i) => {
-                p.x += p.sx; p.y += p.sy; p.alpha -= 0.01;
+                p.x += p.sx; p.y += p.sy; p.sy += 0.05; // 增加一點點重力感
+                p.alpha -= 0.012;
                 ctx.globalAlpha = p.alpha;
                 ctx.fillStyle = p.color;
-                ctx.shadowBlur = 15; ctx.shadowColor = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                 if(p.alpha <= 0) particles.splice(i, 1);
             });
@@ -226,7 +243,7 @@
 
         function shareLink() {
             navigator.clipboard.writeText(window.location.href);
-            alert("連結已複製！");
+            alert("連結已複製，快分享給夥伴！");
         }
     </script>
 </body>
