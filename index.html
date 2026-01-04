@@ -1,40 +1,115 @@
-/* 確保場景容器撐滿螢幕且內容置中 */
-.scene {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    display: none; /* 預設隱藏 */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.8s ease-in-out; /* 平滑淡入 */
-}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>～終極2組🧧絕對保護～</title>
+    <style>
+        :root { --red: #b32424; --gold: #f3d18c; --dark: #1a1a1a; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--dark); color: white; font-family: sans-serif; overflow: hidden; }
 
-/* 啟動狀態 */
-.scene.active {
-    display: flex;
-    opacity: 1;
-}
+        /* 全螢幕置中容器 */
+        .scene {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; text-align: center; opacity: 0; transition: opacity 0.8s;
+        }
+        .scene.active { display: flex; opacity: 1; }
 
-/* 確保背景圖層填滿 */
-.text-bg-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-color: #000; /* 預防圖沒出來時全黑 */
-}
+        /* 第一頁照片設定：強制適應螢幕寬度並居中 */
+        .photo-frame {
+            width: 85%; max-width: 400px;
+            aspect-ratio: 4 / 3; /* 根據您的照片比例調整，或設為 auto */
+            border: 3px solid var(--gold);
+            margin-bottom: 30px;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            background: #222;
+        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-.text-bg-layer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.2; /* 這裡調整刷淡程度 */
-}
+        /* 第二頁刷淡背景 */
+        .bg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2; filter: blur(5px); }
+        .bg-layer img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 按鈕樣式 */
+        .main-btn {
+            background: var(--red); color: var(--gold); border: 2px solid var(--gold);
+            padding: 15px 40px; font-size: 1.2rem; border-radius: 50px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: bold;
+        }
+        
+        /* 文案字體 */
+        .text-content { font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; text-shadow: 2px 2px 4px #000; }
+
+        /* 籤筒搖晃 */
+        #main-bucket { width: 180px; margin-top: 20px; transition: 0.1s; }
+        .shaking { animation: shake 0.15s infinite; }
+        @keyframes shake { 0% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+
+        /* 遮罩 */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99; display: none; justify-content: center; align-items: center; }
+        .overlay.show { display: flex; }
+        .card-img { max-width: 80%; animation: pop 0.4s; }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <audio id="bgm" loop src="assets/bgm.mp3"></audio>
+    <audio id="drawSfx" src="assets/draw.mp3"></audio>
+
+    <section id="scene-1" class="scene active">
+        <div class="photo-frame">
+            <img src="assets/intro.jpg" alt="Memory">
+        </div>
+        <button class="main-btn" onclick="nextScene(1)">開啟祝福</button>
+    </section>
+
+    <section id="scene-2" class="scene">
+        <div class="bg-layer">
+            <img src="assets/intro.jpg" alt="BG">
+        </div>
+        <div id="text-display" class="text-content"></div>
+        <button class="main-btn" onclick="nextScene(2)">前往求籤</button>
+    </section>
+
+    <section id="scene-3" class="scene">
+        <h2 style="color:var(--gold)">點擊籤筒開始祈福</h2>
+        <img src="assets/container.png" id="main-bucket" onclick="startDraw()" alt="籤筒">
+    </section>
+
+    <div id="overlay" class="overlay" onclick="this.classList.remove('show')">
+        <img id="card-result" class="card-img" src="">
+    </div>
+
+    <script>
+        function nextScene(n) {
+            document.getElementById('scene-'+n).classList.remove('active');
+            document.getElementById('scene-'+(n+1)).classList.add('active');
+            if(n === 1) {
+                document.getElementById('bgm').play().catch(()=>{});
+                loadText();
+            }
+        }
+
+        function loadText() {
+            fetch('content.txt').then(r => r.text()).then(t => {
+                document.getElementById('text-display').innerText = t;
+            });
+        }
+
+        function startDraw() {
+            const b = document.getElementById('main-bucket');
+            document.getElementById('drawSfx').play();
+            b.classList.add('shaking');
+            setTimeout(() => {
+                b.classList.remove('shaking');
+                const idx = Math.floor(Math.random() * 11) + 1;
+                document.getElementById('card-result').src = `assets/card_${idx}.png`;
+                document.getElementById('overlay').classList.add('show');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
