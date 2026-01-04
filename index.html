@@ -22,7 +22,18 @@
         }
         .scene.active { display: flex; animation: fadeIn 0.5s; }
 
-        /* 相片顯示優化：保證不切圖 */
+        /* 首頁護身符：修正為左右對稱搖晃 */
+        .talisman-cover { 
+            width: 200px; 
+            animation: swing 4s infinite ease-in-out; 
+            cursor: pointer;
+            filter: drop-shadow(0 0 15px rgba(243, 209, 140, 0.4));
+        }
+        @keyframes swing {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
         .photo-frame {
             width: 90%; max-width: 450px;
             border: 2px solid var(--gold);
@@ -32,34 +43,29 @@
         }
         .photo-frame img { width: 100%; height: auto; max-height: 45vh; display: block; object-fit: contain; }
 
-        /* 文案優化：精簡行距 */
-        .text-content {
-            font-size: 0.95rem; line-height: 1.5; letter-spacing: 0.5px;
-            margin-bottom: 15px; text-shadow: 1px 1px 3px #000;
-            padding: 0 15px; color: #f0f0f0;
-        }
+        .text-content { font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; padding: 0 15px; }
 
         .main-btn {
             background: linear-gradient(180deg, #d32f2f, #8b0000);
             color: var(--gold); border: 1px solid var(--gold);
             padding: 12px 30px; font-size: 1rem; border-radius: 50px; 
-            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px #000;
-            margin: 5px;
+            cursor: pointer; font-weight: bold; margin: 5px;
         }
 
-        /* 結局相簿疊加 */
+        /* 結局相簿：左右微斜亂疊感 */
         .stack-box { 
-            position: relative; width: 85%; max-width: 400px; 
-            aspect-ratio: 4/3; margin-bottom: 15px; cursor: pointer; 
+            position: relative; width: 85%; max-width: 380px; 
+            aspect-ratio: 4/3; margin-bottom: 25px; cursor: pointer; 
         }
         .stack-img { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: contain; border: 2px solid var(--gold); background: #000;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            object-fit: cover; border: 4px solid #fff; /* 拍立得白邊感 */
+            background: #222; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1); 
         }
 
         .final-msg { 
-            font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 30px var(--gold);
+            font-size: 2.6rem; color: var(--gold); text-shadow: 0 0 30px var(--gold);
             display: none; opacity: 0; transform: scale(0.5);
         }
 
@@ -73,14 +79,14 @@
     <audio id="magicSfx" src="assets/magic.mp3"></audio>
 
     <section id="scene-1" class="scene active">
-        <img src="assets/cover_talisman.png" style="width:180px; animation:shake 3s infinite;" onclick="triggerMagic(1)">
-        <p style="color:var(--gold); margin-top:20px; letter-spacing: 2px; opacity:0.8;">點擊護身符 · 開啟祝福</p>
+        <img src="assets/cover_talisman.png" class="talisman-cover" onclick="triggerMagic(1)">
+        <p style="color:var(--gold); margin-top:30px; letter-spacing: 2px;">點擊護身符 · 開啟祝福</p>
     </section>
 
     <section id="scene-2" class="scene">
-        <img src="assets/text_bg.jpg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.2; object-fit:cover;">
+        <img src="assets/text_bg.JPG" class="bg-layer" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.2; object-fit:cover;" onerror="this.src='assets/text_bg.jpg'">
         <div class="photo-frame">
-            <img src="assets/intro.jpg">
+            <img src="assets/intro.jpg" onerror="this.src='assets/intro.JPG'">
         </div>
         <div id="text-display" class="text-content"></div>
         <button class="main-btn" onclick="triggerMagic(2)">點擊開始領取祝福</button>
@@ -93,7 +99,7 @@
     </section>
 
     <div id="card-overlay" class="scene" style="background:rgba(0,0,0,0.98); z-index:100;">
-        <img id="card-result" style="width:90%; max-height:75vh; object-fit:contain; border-radius:10px;">
+        <img id="card-result" style="width:90%; max-height:75vh; object-fit:contain;">
         <div style="margin-top:20px; display: flex;">
             <button class="main-btn" onclick="closeCard()">收取祝福</button>
             <button class="main-btn" style="background:var(--gold); color:var(--deep-red);" onclick="goToEnding()">祈福結束</button>
@@ -101,9 +107,8 @@
     </div>
 
     <section id="scene-4" class="scene">
-        <div id="stack-container" class="stack-box" onclick="nextStack()">
-            </div>
-        <p id="stack-hint" style="color:var(--gold); font-size:0.9rem; margin-top:10px;">點擊照片翻閱下一張...</p>
+        <div id="stack-container" class="stack-box" onclick="nextStack()"></div>
+        <p id="stack-hint" style="color:var(--gold); font-size:0.9rem;">點擊翻閱 11 張回憶...</p>
         <h1 id="final-msg" class="final-msg">終極二組<br>永不結束</h1>
         <div id="final-btns" style="opacity:0; transition:1s; margin-top:20px; display:none;">
             <button class="main-btn" onclick="location.reload()">🔂 再播放一次</button>
@@ -115,7 +120,7 @@
         let currentDraw = 0;
         let stackIdx = 1;
         const totalCards = 11;
-        const totalStacks = 5; 
+        const totalStacks = 11; // 擴張到 11 張
         const canvas = document.getElementById('magic-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -134,8 +139,7 @@
         }
 
         function loadText() {
-            const content = `分組活動裡，從鬼故事到八卦大會，\n我們在最輕鬆的氛圍中無所不談。\n我們也並肩走過結業旅行、\n8 公里路跑等共同回憶。\n我們是 KO 值衝破天際的終極 2 組，\n組成「祝福陣線」，想用 11 張平安符，\n成為輔導員心中的最強護盾！`;
-            document.getElementById('text-display').innerText = content;
+            document.getElementById('text-display').innerText = `分組活動裡，從鬼故事到八卦大會，\n我們在最輕鬆的氛圍中無所不談。\n我們也並肩走過結業旅行、\n8 公里路跑等共同回憶。\n我們是 KO 值衝破天際的終極 2 組，\n組成「祝福陣線」，想用 11 張平安符，\n成為輔導員心中的最強護盾！`;
         }
 
         function drawNext() {
@@ -144,7 +148,7 @@
             setTimeout(() => {
                 b.style.animation = "";
                 currentDraw++;
-                document.getElementById('progress-text').innerText = `${currentDraw} / ${totalCards}`;
+                document.getElementById('progress-text').innerText = `${currentDraw} / 11`;
                 document.getElementById('card-result').src = `assets/card_${currentDraw}.png`;
                 document.getElementById('card-overlay').style.display = 'flex';
                 playMagic(false);
@@ -162,7 +166,7 @@
             const s4 = document.getElementById('scene-4');
             s4.classList.add('active');
             s4.style.display = 'flex';
-            initStack(); 
+            initStack();
             playMagic(true);
         }
 
@@ -171,12 +175,20 @@
             if(container.innerHTML !== "") return;
             for(let i=totalStacks; i>=1; i--) {
                 const img = document.createElement('img');
-                img.src = `assets/ending_${i}.jpg`;
+                // 嘗試載入 .JPG (您的實際檔名)
+                img.src = `assets/ending_${i}.JPG`;
                 img.className = 'stack-img';
                 img.id = `stack-${i}`;
                 img.style.zIndex = totalStacks - i;
-                // 防止破圖處理
-                img.onerror = function() { this.src = 'assets/ending.jpg'; };
+                
+                // 核心視覺：隨機左右傾斜 -15 到 15 度
+                const randomRotate = Math.floor(Math.random() * 30) - 15;
+                img.style.transform = `rotate(${randomRotate}deg)`;
+
+                // 錯誤處理
+                img.onerror = function() { 
+                    this.src = (this.src.includes('.JPG')) ? this.src.replace('.JPG', '.jpg') : 'assets/ending.jpg'; 
+                };
                 container.appendChild(img);
             }
         }
@@ -184,17 +196,16 @@
         function nextStack() {
             if(stackIdx < totalStacks) {
                 const currentImg = document.getElementById(`stack-${stackIdx}`);
-                currentImg.style.transform = "translateX(200%) rotate(45deg)";
+                currentImg.style.transform = "translateX(250%) translateY(-50%) rotate(60deg)";
                 currentImg.style.opacity = "0";
                 stackIdx++;
                 playMagic(false);
             } else {
                 const container = document.getElementById('stack-container');
-                const hint = document.getElementById('stack-hint');
-                playMagic(true, true); // 超級大碎裂
+                playMagic(true, true); // 超誇張碎裂
                 container.style.opacity = "0";
-                container.style.transform = "scale(2) rotate(20deg)";
-                hint.style.display = "none";
+                container.style.transform = "scale(2.5) rotate(30deg)";
+                document.getElementById('stack-hint').style.display = "none";
                 
                 setTimeout(() => {
                     container.style.display = "none";
@@ -202,27 +213,22 @@
                     msg.style.display = "block";
                     setTimeout(() => { 
                         msg.style.opacity = "1"; msg.style.transform = "scale(1)"; 
-                        const btns = document.getElementById('final-btns');
-                        btns.style.display = "block";
-                        setTimeout(()=> btns.style.opacity = "1", 500);
+                        document.getElementById('final-btns').style.display = "block";
+                        setTimeout(()=> document.getElementById('final-btns').style.opacity = "1", 500);
                     }, 100);
                 }, 1000);
             }
         }
 
         function playMagic(isBig, isExplosion = false) {
-            const count = isExplosion ? 600 : (isBig ? 150 : 40);
-            const sfx = document.getElementById('magicSfx');
-            if(sfx) { sfx.currentTime = 0; sfx.play().catch(()=>{}); }
-
+            const count = isExplosion ? 800 : (isBig ? 180 : 50);
             for(let i=0; i<count; i++) {
                 particles.push({
                     x: window.innerWidth/2, y: window.innerHeight/2,
-                    sx: (Math.random()-0.5) * (isExplosion ? 30 : 15),
-                    sy: (Math.random()-0.5) * (isExplosion ? 30 : 15),
-                    size: Math.random()*5+2,
-                    alpha: 1,
-                    color: `hsl(${Math.random()*50 + 35}, 100%, 70%)`
+                    sx: (Math.random()-0.5) * (isExplosion ? 35 : 18),
+                    sy: (Math.random()-0.5) * (isExplosion ? 35 : 18),
+                    size: Math.random()*6+2, alpha: 1,
+                    color: `hsl(${Math.random()*60 + 30}, 100%, 75%)`
                 });
             }
             animate();
@@ -231,8 +237,8 @@
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach((p, i) => {
-                p.x += p.sx; p.y += p.sy; p.sy += 0.05; // 增加一點點重力感
-                p.alpha -= 0.012;
+                p.x += p.sx; p.y += p.sy; p.sy += 0.08;
+                p.alpha -= 0.01;
                 ctx.globalAlpha = p.alpha;
                 ctx.fillStyle = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
@@ -243,7 +249,7 @@
 
         function shareLink() {
             navigator.clipboard.writeText(window.location.href);
-            alert("連結已複製，快分享給夥伴！");
+            alert("連結已複製，快分享祝福！");
         }
     </script>
 </body>
