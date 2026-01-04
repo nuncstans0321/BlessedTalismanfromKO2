@@ -5,83 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>～終極2組🧧絕對保護～</title>
     <style>
-        :root { 
-            --deep-red: #8b0000; 
-            --temple-gold: #f3d18c; 
-            --silk-red: #4a0404;
-        }
+        :root { --deep-red: #8b0000; --gold: #f3d18c; --silk: #4a0404; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        /* 喜氣裝飾背景：使用深紅綢緞質感 */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: radial-gradient(circle, var(--silk-red) 0%, #1a0000 100%);
-            color: #fff; overflow: hidden; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background: radial-gradient(circle, var(--silk) 0%, #1a0000 100%);
+            color: #fff; overflow: hidden; font-family: sans-serif;
         }
 
         #magic-canvas { position: fixed; top: 0; left: 0; z-index: 999; pointer-events: none; }
 
-        /* 場景基礎設定 */
         .scene {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: none; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px; text-align: center; z-index: 10;
+            padding: 15px; text-align: center; z-index: 10;
         }
-        .scene.active { display: flex; animation: fadeIn 1.2s ease-in-out; }
+        .scene.active { display: flex; animation: fadeIn 0.8s; }
 
-        /* 照片外框增加金色飾邊 */
+        /* 相片框優化：確保不切圖 */
         .photo-frame {
-            width: 85%; max-width: 380px;
-            border: 3px solid var(--temple-gold);
-            padding: 5px;
-            background: rgba(255,255,255,0.05);
-            box-shadow: 0 0 20px rgba(243, 209, 140, 0.3);
-            margin-bottom: 25px;
+            width: 95%; max-width: 450px;
+            border: 2px solid var(--gold);
+            padding: 3px; background: rgba(0,0,0,0.3);
+            box-shadow: 0 0 15px rgba(243, 209, 140, 0.4);
+            margin-bottom: 15px;
         }
-        .photo-frame img { width: 100%; display: block; }
+        .photo-frame img { width: 100%; height: auto; display: block; object-fit: contain; }
 
-        /* 文案排版微調：增加行距與字距 */
+        /* 文案優化：減少行距與間隔 */
         .text-content {
-            font-size: 1.15rem; line-height: 2.2; letter-spacing: 1.5px;
-            margin-bottom: 30px; text-shadow: 2px 2px 5px #000;
-            color: #fefefe; font-weight: 300;
+            font-size: 1rem; line-height: 1.6; letter-spacing: 1px;
+            margin-bottom: 15px; text-shadow: 2px 2px 4px #000;
+            padding: 0 10px; max-width: 90%;
         }
 
-        /* 護身符封面 */
-        .talisman-cover { 
-            width: 240px; cursor: pointer; 
-            filter: drop-shadow(0 0 15px var(--temple-gold));
-            animation: float 4s infinite ease-in-out; 
-        }
-
-        /* 背景刷淡層 */
-        .bg-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -1; opacity: 0.18; filter: blur(6px) grayscale(0.3); 
-            object-fit: cover; 
-        }
-
-        /* 標題與按鈕 */
-        .gold-title { color: var(--temple-gold); text-shadow: 0 0 10px rgba(243,209,140,0.5); margin-bottom: 15px; }
         .main-btn {
             background: linear-gradient(180deg, #d32f2f, #8b0000);
-            color: var(--temple-gold); border: 2px solid var(--temple-gold);
-            padding: 14px 40px; font-size: 1.1rem; border-radius: 50px; 
-            cursor: pointer; font-weight: bold; margin: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            color: var(--gold); border: 2px solid var(--gold);
+            padding: 12px 35px; font-size: 1.1rem; border-radius: 50px; 
+            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        /* 結局融合文字 */
-        .final-msg { 
-            font-size: 2.5rem; color: var(--temple-gold); 
-            text-shadow: 0 0 20px var(--temple-gold); 
-            opacity: 0; transform: scale(0.9);
-            display: none; transition: 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        /* 結局多層照片設定 */
+        .stack-box { position: relative; width: 90%; max-width: 400px; height: 250px; margin-bottom: 20px; cursor: pointer; }
+        .stack-img { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            object-fit: cover; border: 3px solid var(--gold); 
+            transition: transform 0.5s, opacity 0.5s; 
         }
-        .final-msg.show { opacity: 1; transform: scale(1); display: block; }
+
+        .final-msg { 
+            font-size: 2.8rem; color: var(--gold); text-shadow: 0 0 25px var(--gold);
+            display: none; opacity: 0;
+        }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes shake { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(10deg); } }
     </style>
 </head>
 <body>
@@ -90,48 +69,49 @@
     <audio id="magicSfx" src="assets/magic.mp3"></audio>
 
     <section id="scene-1" class="scene active">
-        <img src="assets/cover_talisman.png" class="talisman-cover" onclick="triggerMagic(1)">
-        <p style="color:var(--temple-gold); margin-top:40px; letter-spacing: 4px; opacity:0.8;">點擊護身符 · 開啟祝福</p>
+        <img src="assets/cover_talisman.png" style="width:200px; animation:shake 3s infinite;" onclick="triggerMagic(1)">
+        <p style="color:var(--gold); margin-top:20px; letter-spacing: 3px;">點擊開啟保護</p>
     </section>
 
     <section id="scene-2" class="scene">
-        <img src="assets/text_bg.jpg" class="bg-layer" onerror="this.src='assets/intro.jpg'">
+        <img src="assets/text_bg.jpg" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.15; object-fit:cover;">
         <div class="photo-frame">
-            <img src="assets/intro.jpg" alt="Memory">
+            <img src="assets/intro.jpg">
         </div>
-        <div id="text-display" class="text-content">
-            </div>
-        <button class="main-btn" onclick="triggerMagic(2)">點擊開始領取祝福</button>
+        <div id="text-display" class="text-content"></div>
+        <button class="main-btn" onclick="triggerMagic(2)">領取祝福</button>
     </section>
 
     <section id="scene-3" class="scene">
-        <h2 class="gold-title">請誠心點擊籤筒</h2>
-        <img src="assets/container.png" id="main-bucket" style="width:190px; cursor:pointer;" onclick="drawNext()">
-        <p id="progress-text" style="margin-top:25px; color:var(--temple-gold); opacity:0.6; font-size:0.9rem;">領取進度：0 / 11</p>
+        <h2 style="color:var(--gold); margin-bottom:20px;">請點擊籤筒</h2>
+        <img src="assets/container.png" id="main-bucket" style="width:160px;" onclick="drawNext()">
+        <p id="progress-text" style="color:var(--gold); margin-top:15px; opacity:0.6;">0 / 11</p>
     </section>
 
-    <div id="card-overlay" class="scene" style="background:rgba(0,0,0,0.95); z-index:100;">
-        <img id="card-result" style="width:90%; max-height:75vh; object-fit:contain; border-radius:10px; box-shadow:0 0 30px var(--temple-gold);">
-        <div style="margin-top:30px; display:flex;">
-            <button id="btn-continue" class="main-btn" onclick="closeCard()">繼續抽籤</button>
-            <button class="main-btn" style="background:var(--temple-gold); color:var(--deep-red);" onclick="goToEnding()">收取祝福</button>
+    <div id="card-overlay" class="scene" style="background:rgba(0,0,0,0.96); z-index:100;">
+        <img id="card-result" style="width:92%; max-height:80vh; object-fit:contain; border-radius:10px;">
+        <div style="margin-top:20px;">
+            <button class="main-btn" onclick="closeCard()">繼續</button>
+            <button class="main-btn" style="background:var(--gold); color:var(--deep-red);" onclick="triggerMagic(3)">收取</button>
         </div>
     </div>
 
     <section id="scene-4" class="scene">
-        <div id="ending-box" class="photo-frame" style="max-width:450px;">
-            <img src="assets/ending.jpg">
-        </div>
+        <div id="stack-container" class="stack-box" onclick="nextStack()">
+            </div>
+        <p id="stack-hint" style="color:var(--gold); font-size:0.8rem;">點擊照片翻閱下一張...</p>
         <h1 id="final-msg" class="final-msg">終極二組<br>永不結束</h1>
-        <div id="final-btns" style="opacity:0; transition:2s; margin-top:30px;">
-            <button class="main-btn" onclick="location.reload()">🔂 重播</button>
-            <button class="main-btn" onclick="shareLink()">🔗 分享</button>
+        <div id="final-btns" style="opacity:0; transition:2s; margin-top:20px; display:none;">
+            <button class="main-btn" onclick="location.reload()">重播</button>
+            <button class="main-btn" onclick="shareLink()">分享</button>
         </div>
     </section>
 
     <script>
         let currentDraw = 0;
+        let stackIdx = 1;
         const totalCards = 11;
+        const totalStacks = 5; // 您可以放置 ending_1 到 ending_5
         const canvas = document.getElementById('magic-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -140,17 +120,17 @@
         window.dispatchEvent(new Event('resize'));
 
         function triggerMagic(n) {
-            playMagic(false);
+            playMagic(true); // 誇張轉場
             setTimeout(() => {
                 document.getElementById(`scene-${n}`).style.display = 'none';
                 document.getElementById(`scene-${n+1}`).classList.add('active');
-                if(n===1) { document.getElementById('bgm').play().catch(()=>{}); loadText(); }
+                if(n===1) { document.getElementById('bgm').play(); loadText(); }
+                if(n===3) initStack();
             }, 600);
         }
 
         function loadText() {
-            // 優化排版：將語句分行呈現
-            const content = `分組活動裡，從鬼故事到八卦大會，\n我們在最輕鬆的氛圍中無所不談。\n\n我們並肩走過結業旅行、\n8 公里路跑等共同回憶。\n\n我們是 KO 值衝破天際的終極 2 組，\n組成「祝福陣線」，想用 11 張平安符，\n成為輔導員心中的最強護盾！`;
+            const content = `分組活動裡，從鬼故事到八卦大會，\n我們在最輕鬆的氛圍中無所不談。\n我們也並肩走過結業旅行、\n8 公里路跑等共同回憶。\n我們是 KO 值衝破天際的終極 2 組，\n組成「祝福陣線」，想用 11 張平安符，\n成為輔導員心中的最強護盾！`;
             document.getElementById('text-display').innerText = content;
         }
 
@@ -160,50 +140,72 @@
             setTimeout(() => {
                 b.style.animation = "";
                 currentDraw++;
-                document.getElementById('progress-text').innerText = `已領取：${currentDraw} / ${totalCards}`;
+                document.getElementById('progress-text').innerText = `${currentDraw} / ${totalCards}`;
                 document.getElementById('card-result').src = `assets/card_${currentDraw}.png`;
                 document.getElementById('card-overlay').style.display = 'flex';
-                if(currentDraw === totalCards) document.getElementById('btn-continue').innerText = "最後驚喜";
                 playMagic(false);
-            }, 1200);
+            }, 1000);
         }
 
         function closeCard() {
             document.getElementById('card-overlay').style.display = 'none';
-            if(currentDraw === totalCards) goToEnding();
+            if(currentDraw === totalCards) triggerMagic(3);
         }
 
-        function goToEnding() {
-            document.getElementById('card-overlay').style.display = 'none';
-            document.getElementById('scene-3').style.display = 'none';
-            document.getElementById('scene-4').classList.add('active');
-            
-            setTimeout(() => {
-                const box = document.getElementById('ending-box');
-                playMagic(true); // 觸發碎裂粒子
-                box.style.opacity = '0';
-                box.style.transform = 'scale(1.3) rotate(5deg)';
-                box.style.filter = 'blur(15px)';
+        // 初始化疊加照片
+        function initStack() {
+            const container = document.getElementById('stack-container');
+            for(let i=totalStacks; i>=1; i--) {
+                const img = document.createElement('img');
+                img.src = `assets/ending_${i}.jpg`;
+                img.className = 'stack-img';
+                img.id = `stack-${i}`;
+                img.style.zIndex = totalStacks - i;
+                container.appendChild(img);
+            }
+        }
+
+        function nextStack() {
+            if(stackIdx < totalStacks) {
+                const currentImg = document.getElementById(`stack-${stackIdx}`);
+                currentImg.style.transform = "translateX(150%) rotate(20deg)";
+                currentImg.style.opacity = "0";
+                stackIdx++;
+            } else {
+                // 最後一張觸發碎裂
+                const container = document.getElementById('stack-container');
+                const hint = document.getElementById('stack-hint');
+                playMagic(true, true); // 超誇張碎裂爆炸
+                container.style.opacity = "0";
+                container.style.transform = "scale(2) rotate(10deg)";
+                hint.style.display = "none";
                 
                 setTimeout(() => {
-                    box.style.display = 'none';
+                    container.style.display = "none";
                     const msg = document.getElementById('final-msg');
-                    msg.classList.add('show');
-                    setTimeout(() => { document.getElementById('final-btns').style.opacity = '1'; }, 1500);
-                }, 1200);
-            }, 3000);
+                    msg.style.display = "block";
+                    setTimeout(() => { 
+                        msg.style.opacity = "1"; 
+                        document.getElementById('final-btns').style.display = "block";
+                        setTimeout(()=> document.getElementById('final-btns').style.opacity = "1", 500);
+                    }, 100);
+                }, 1000);
+            }
         }
 
-        function playMagic(isBig) {
-            const count = isBig ? 300 : 80;
+        function playMagic(isBig, isExplosion = false) {
+            const count = isExplosion ? 500 : (isBig ? 150 : 50);
             const sfx = document.getElementById('magicSfx');
             if(sfx) sfx.play().catch(()=>{});
+
             for(let i=0; i<count; i++) {
                 particles.push({
-                    x: canvas.width/2, y: canvas.height/2,
-                    sx: Math.random()*15-7.5, sy: Math.random()*15-7.5,
-                    size: Math.random()*5+2, alpha: 1,
-                    color: isBig ? '#f3d18c' : '#ffffff'
+                    x: window.innerWidth/2, y: window.innerHeight/2,
+                    sx: isExplosion ? (Math.random()*25-12.5) : (Math.random()*12-6),
+                    sy: isExplosion ? (Math.random()*25-12.5) : (Math.random()*12-6),
+                    size: Math.random()*5+3,
+                    alpha: 1,
+                    color: `hsl(${Math.random()*50 + 40}, 100%, 70%)` // 金黃閃爍色
                 });
             }
             animate();
@@ -212,10 +214,10 @@
         function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach((p, i) => {
-                p.x += p.sx; p.y += p.sy; p.alpha -= 0.015;
+                p.x += p.sx; p.y += p.sy; p.alpha -= 0.01;
                 ctx.globalAlpha = p.alpha;
                 ctx.fillStyle = p.color;
-                ctx.shadowBlur = 10; ctx.shadowColor = p.color;
+                ctx.shadowBlur = 15; ctx.shadowColor = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                 if(p.alpha <= 0) particles.splice(i, 1);
             });
@@ -224,11 +226,8 @@
 
         function shareLink() {
             navigator.clipboard.writeText(window.location.href);
-            alert("祝福連結已複製，快分享吧！");
+            alert("連結已複製！");
         }
     </script>
-    <style> 
-        @keyframes shake { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(12deg); } } 
-    </style>
 </body>
 </html>
