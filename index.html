@@ -108,7 +108,7 @@
 
     <section id="scene-4" class="scene">
         <div id="stack-container" class="stack-box" onclick="nextStack()"></div>
-        <p id="stack-hint" style="color:var(--gold); font-size:0.9rem;">點擊翻閱 12 張回憶...</p>
+        <p id="stack-hint" style="color:var(--gold); font-size:0.9rem;">點擊翻閱 11 張回憶...</p>
         <h1 id="final-msg" class="final-msg">終極二組<br>永不結束</h1>
         <div id="final-btns" style="opacity:0; transition:1s; margin-top:20px; display:none;">
             <button class="main-btn" onclick="location.reload()">🔂 再播放一次</button>
@@ -119,8 +119,8 @@
     <script>
         let currentDraw = 0;
         let stackIdx = 1;
-        const totalCards = 12;
-        const totalStacks = 12; // 擴張到 11 張
+        const totalCards = 11;
+        const totalStacks = 11; // 擴張到 11 張
         const canvas = document.getElementById('magic-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
